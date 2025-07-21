@@ -347,6 +347,64 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+
+        -- Neotest related mappings
+        {
+          '<leader>n',
+          group = '🧪 Test',
+          nowait = true,
+          remap = false,
+        },
+        {
+          '<leader>nr',
+          "<cmd>lua require('neotest').run.run()<cr>",
+          desc = 'Run nearest test',
+        },
+        {
+          '<leader>nf',
+          "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<cr>",
+          desc = 'Run current file',
+        },
+        {
+          '<leader>na',
+          "<cmd>lua require('neotest').run.run({ suite = true })<cr>",
+          desc = 'Run all tests',
+        },
+        {
+          '<leader>nd',
+          "<cmd>lua require('neotest').run.run({strategy = 'dap'})<cr>",
+          desc = 'Debug nearest test',
+        },
+        {
+          '<leader>ns',
+          "<cmd>lua require('neotest').run.stop()<cr>",
+          desc = 'Stop test',
+        },
+        {
+          '<leader>nn',
+          "<cmd>lua require('neotest').run.attach()<cr>",
+          desc = 'Attach to nearest test',
+        },
+        {
+          '<leader>no',
+          "<cmd>lua require('neotest').output.open()<cr>",
+          desc = 'Show test output',
+        },
+        {
+          '<leader>np',
+          "<cmd>lua require('neotest').output_panel.toggle()<cr>",
+          desc = 'Toggle output panel',
+        },
+        {
+          '<leader>nv',
+          "<cmd>lua require('neotest').summary.toggle()<cr>",
+          desc = 'Toggle summary',
+        },
+        {
+          '<leader>nc',
+          "<cmd>lua require('neotest').run.run({ suite = true, env = { CI = true } })<cr>",
+          desc = 'Run all tests with CI',
+        },
       },
     },
   },
@@ -671,6 +729,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        rubocop = {},
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -770,6 +829,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
+        ruby = { 'rubocop' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -881,20 +941,25 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
+    -- 'folke/tokyonight.nvim',
+    -- priority = 1000, -- Make sure to load this before all the other start plugins.
+    -- config = function()
+    --   ---@diagnostic disable-next-line: missing-fields
+    --   require('tokyonight').setup {
+    --     styles = {
+    --       comments = { italic = false }, -- Disable italics in comments
+    --     },
+    --   }
 
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+    -- Load the colorscheme here.
+    -- Like many other themes, this one has different styles, and you could load
+    -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+    -- vim.cmd.colorscheme 'tokyonight-night'
+    -- end,
+    'catppuccin/nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'catppuccin-frappe'
     end,
   },
 
@@ -973,18 +1038,18 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
